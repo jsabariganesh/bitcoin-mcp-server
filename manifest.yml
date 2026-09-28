@@ -8,3 +8,8 @@ applications:
     path: target/bitcoinn-mcp-server-0.0.1-SNAPSHOT.jar
     env:
       JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 21.+ } }'
+      # Tanzu OTel Collector Metrics Configuration
+      TANZU_METRICS_JVM_ENABLED: true
+      TANZU_METRICS_JVM_ENDPOINT: https://otel-collector:9565/v1/metrics
+      TANZU_METRICS_CUSTOM_ENABLED: true
+      TANZU_METRICS_CUSTOM_ENDPOINT: https://otel-collector:9566/v1/metrics
