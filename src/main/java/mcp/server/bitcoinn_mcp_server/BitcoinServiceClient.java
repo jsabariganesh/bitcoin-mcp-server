@@ -4,6 +4,7 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -58,38 +59,10 @@ public class BitcoinServiceClient {
         );
     }
 
-    @Tool
-    public Integer getBitcoinPrice() {
-        totalRequestsCounter.increment();
-        getCurrencyCounter("usd").increment();
-
-        return priceFetchTimer.record(() -> {
-            try {
-                String url = BASE_URL + "/simple/price?ids=bitcoin&vs_currencies=usd";
-                Map<String, Object> response = restTemplate.getForObject(url, Map.class);
-                if (response == null || !response.containsKey("bitcoin")) {
-                    log.warn("Empty or invalid response from upstream price API");
-                    failedRequestsCounter.increment();
-                    return null;
-                }
-                Map<String, Object> bitcoinData = (Map<String, Object>) response.get("bitcoin");
-                Object priceObject = bitcoinData.get("usd");
-                if (priceObject instanceof Number num) {
-                    int price = num.intValue();
-                    latestUsdPriceGauge.set(num.doubleValue());
-                    return price;
-                }
-                return null;
-            } catch (Exception e) {
-                log.error("Error fetching Bitcoin USD price: {}", e.getMessage());
-                failedRequestsCounter.increment();
-                throw e;
-            }
-        });
-    }
-
-    @Tool
-    public Integer getBitcoinPriceByCurrency(String currency) {
+    @Tool(description = "Get the current price of Bitcoin in a fiat currency (such as USD, EUR, GBP). Defaults to USD if no currency is specified.")
+    public Integer getBitcoinPrice(
+            @ToolParam(description = "The target fiat currency symbol, e.g. USD, EUR, GBP (default is USD)", required = false)
+            String currency) {
         String curr = (currency != null && !currency.isBlank()) ? currency.trim().toLowerCase() : "usd";
         totalRequestsCounter.increment();
         getCurrencyCounter(curr).increment();
@@ -118,5 +91,13 @@ public class BitcoinServiceClient {
                 throw e;
             }
         });
+    }
+
+    public Integer getBitcoinPrice() {
+        return getBitcoinPrice("usd");
+    }
+
+    public Integer getBitcoinPriceByCurrency(String currency) {
+        return getBitcoinPrice(currency);
     }
 }
