@@ -6,38 +6,33 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.3</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>mcp.server</groupId>
 	<artifactId>bitcoinn-mcp-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>bitcoinn-mcp-server</name>
 	<description>Demo project for Spring Boot</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
 	<properties>
 		<java.version>21</java.version>
 		<spring-ai.version>1.0.0-M6</spring-ai.version>
 	</properties>
 	<dependencies>
-        	<dependency>
-            		<groupId>org.springframework.ai</groupId>
-            		<artifactId>spring-ai-mcp-server-webmvc-spring-boot-starter</artifactId>
-        	</dependency>
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-mcp-server-webmvc-spring-boot-starter</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -56,7 +51,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -65,5 +59,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
